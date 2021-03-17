@@ -1,0 +1,67 @@
+Option Explicit
+
+Dim filePath As String
+
+Private Sub cmdBrowse_Click()
+    
+    With frmSelectData.cdl
+        .InitDir = ThisWorkbook.Path
+        .Filename = ""
+        .Filter = "*.*"
+        .ShowOpen
+        frmSelectData.txtFile.Text = .Filename
+    End With
+    filePath = frmSelectData.txtFile.Text
+    
+End Sub
+
+Private Sub cmdCancel_Click()
+
+    Unload frmSelectData
+    
+End Sub
+
+
+Private Sub cmdClearList_Click()
+    
+    lstOutput.Clear
+    
+End Sub
+
+Private Sub cmdRun_Click()
+
+    Dim sqlstr As String
+    Dim cn As Object
+    Dim rs As Object
+    Dim i As Integer
+    
+    Set cn = CreateObject("ADODB.Connection")
+    Set rs = CreateObject("ADODB.Recordset")
+    
+    lstOutput.Clear
+
+    With cn
+        .connectionString = "Data Source=" & filePath
+        .Provider = "Microsoft.ACE.OLEDB.12.0"
+        .Open
+    End With
+    
+    'sqlstr = "select vendname, vendzipcode from vendors order by vendzipcode"
+    'sqlstr = "select custcity, custstate from customers order by custcity"
+    sqlstr = "select productname, retailprice from products where retailprice > 100"
+    
+    rs.Open sqlstr, cn
+    i = 0
+    While Not rs.EOF
+        With lstOutput
+            .AddItem
+            .List(i, 0) = rs.fields(0).Value        'read field 0 into column 0
+            .List(i, 1) = rs.fields(1).Value        'read field 1 into column 1
+            i = i + 1
+            rs.movenext
+        End With
+    Wend
+    rs.Close
+    cn.Close
+    
+End Sub
