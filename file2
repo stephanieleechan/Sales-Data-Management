@@ -1,0 +1,82 @@
+Option Explicit
+
+Dim DataBase As String
+
+Private Sub cmdClear_Click()
+
+    lstOutput.Clear
+    
+End Sub
+
+Private Sub cmdExit_Click()
+
+    Unload frmQuery
+    
+End Sub
+
+Private Sub cmdRun_Click()
+    
+    Dim sqlStr As String
+    Dim cn As Object
+    Dim rs As Object
+    Dim i As Integer
+    
+    Set cn = CreateObject("ADODB.Connection")
+    Set rs = CreateObject("ADODB.Recordset")
+    
+    With cn
+        .ConnectionString = "Data Source=" & ThisWorkbook.Path & "\" & DataBase
+        .Provider = "Microsoft.Ace.OLEDB.12.0"
+        .Open
+    End With
+       
+    sqlStr = frmQuery.lstQuery.Text
+    
+    rs.Open sqlStr, cn
+      
+    frmQuery.lstOutput.Clear
+    
+    i = 0
+    While Not rs.EOF
+        lstOutput.AddItem
+        With frmQuery.lstQuery
+            If .ListIndex = 0 Or .ListIndex = 1 Or .ListIndex = 2 Then
+                lstOutput.List(i, 0) = rs.Fields(0).Value
+                lstOutput.List(i, 1) = rs.Fields(1).Value
+            ElseIf .ListIndex = 3 Then
+                lstOutput.List(i, 0) = rs.Fields(0).Value
+                lstOutput.List(i, 1) = rs.Fields(1).Value
+                lstOutput.List(i, 2) = rs.Fields(2).Value
+                lstOutput.List(i, 3) = rs.Fields(3).Value
+            ElseIf .ListIndex = 4 Then
+                lstOutput.List(i, 0) = rs.Fields(0).Value
+                lstOutput.List(i, 1) = rs.Fields(1).Value
+                lstOutput.List(i, 2) = rs.Fields(2).Value
+                lstOutput.List(i, 3) = rs.Fields(3).Value
+                lstOutput.List(i, 4) = rs.Fields(4).Value
+            End If
+        End With
+        i = i + 1
+        rs.MoveNext
+    Wend
+    
+    rs.Close
+    cn.Close
+    
+End Sub
+
+Private Sub UserForm_Initialize()
+
+    DataBase = "northwind2021w.accdb"          ' gives error message - unrecognized database format
+    'DataBase = "sales_orders.mdb"
+    
+    frmQuery.lblDatabase.Caption = "Database: " & DataBase & "  (northwind2021w.accdb gives error message - unrecognized database format)"
+    
+    lstQuery.AddItem "select vendname,vendzipcode from vendors order by vendzipcode"
+    lstQuery.AddItem "SELECT Categories.CategoryDescription, Products.ProductName FROM Categories INNER JOIN Products ON Categories.CategoryID = Products.CategoryID"
+    lstQuery.AddItem "select productname,retailprice from products where retailprice > 100"
+    lstQuery.AddItem "select company,[last name],[first name],[e-mail address] from customers"
+    lstQuery.AddItem "select emplastname,empfirstname,empphonenumber,employeeid from employees order by emplastname"
+    lstQuery.AddItem "select custlastname,custfirstname,custcity,custstate,custzipcode from customers order by custlastname"
+    
+End Sub
