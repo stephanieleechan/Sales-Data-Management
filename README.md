@@ -1,3 +1,3 @@
 # Sales-Database-Management
 
-Analyzed Microsoft Access database, SQL query returned data the user requested with specifications
+Analyzed Microsoft Access database, SQL queries returned data the user requested with specifications
