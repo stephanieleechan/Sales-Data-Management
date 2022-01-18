@@ -1,0 +1,21 @@
+def calc_prov_tax(income): 
+    TAX_RATE = 0.07
+    
+    INCOME_LEVEL_AMOUNT = 50000
+
+    total_prov_tax = TAX_RATE * (income - INCOME_LEVEL_AMOUNT)
+    
+    return total_prov_tax
+    
+    income_over = float(input('Enter your income: $'))
+
+fed_tax = calc_federal_tax(income_over) 
+
+prov_tax = calc_prov_tax(income_over)
+
+tax_liability = fed_tax + prov_tax
+
+print()
+print('Total tax liability: ${:.1f}'.format(tax_liability))
+print('Federal tax: ${:.1f}'.format(fed_tax))
+print('Provincial tax: ${:.1f}'.format(prov_tax))
