@@ -1,0 +1,32 @@
+def calc_federal_tax(income): 
+    TAX_RATE1 = 0.15
+    TAX_RATE2 = 0.25
+    TAX_RATE3 = 0.35
+    
+    INCOME_PORTION1= 35000
+    INCOME_PORTION2 = 65000
+    INCOME_LEVEL = 100000
+    
+
+    tax1 = TAX_RATE1 * INCOME_PORTION1
+
+    tax2 = TAX_RATE2 * INCOME_PORTION2
+    
+    tax3 = TAX_RATE3 * (income - INCOME_LEVEL)
+    
+    total_fed_tax = tax1 + tax2 + tax3 
+    
+    return total_fed_tax
+    
+    income_over = float(input('Enter your income: $'))
+
+fed_tax = calc_federal_tax(income_over) 
+
+prov_tax = calc_prov_tax(income_over)
+
+tax_liability = fed_tax + prov_tax
+
+print()
+print('Total tax liability: ${:.1f}'.format(tax_liability))
+print('Federal tax: ${:.1f}'.format(fed_tax))
+print('Provincial tax: ${:.1f}'.format(prov_tax))
